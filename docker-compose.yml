@@ -42,7 +42,6 @@ services:
       - "traefik.http.services.${TRAEFIK_ROUTER_HTTPS}.loadbalancer.server.port=${TRAEFIK_PORT}"
       - "traefik.http.routers.${TRAEFIK_ROUTER_HTTPS}.tls=${TRAEFIK_TLS_ENABLE}"
       - "traefik.http.routers.${TRAEFIK_ROUTER_HTTPS}.tls.certresolver=${TRAEFIK_CERTRESOLVER}"
-
     networks:
       - traefik-proxy-network
       - backend
