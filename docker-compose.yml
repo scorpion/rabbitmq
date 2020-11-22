@@ -21,19 +21,27 @@ services:
       - TRAEFIK_ENTRYPOINT
       - TRAEFIK_MIDDLEWARES
       - TRAEFIK_NETWORK
-      - TRAEFIK_ROUTER
+      - TRAEFIK_PORT
+      - TRAEFIK_ROUTER_HTTP
+      - TRAEFIK_ROUTER_HTTPS
       - TRAEFIK_TLS_ENABLE
     labels:
+      # Traefik
       - "traefik.enable=${TRAEFIK_ENABLE}"
       - "traefik.docker.network=${TRAEFIK_NETWORK}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER}.rule=Host(`${DOMAIN}`)"
-      - "traefik.http.routers.${TRAEFIK_ROUTER}.entrypoints=${TRAEFIK_ENTRYPOINT}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER}.service=${TRAEFIK_ROUTER}"
-      - "traefik.http.services.${TRAEFIK_ROUTER}.loadbalancer.server.port=${TRAEFIK_PORT}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER}.tls=${TRAEFIK_TLS_ENABLE}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER}.tls.certresolver=${TRAEFIK_CERTRESOLVER}"
-      - "traefik.http.routers.redirects.rule=Host(`${DOMAIN}`)"
-      - "traefik.http.routers.${TRAEFIK_ROUTER}.middlewares=${TRAEFIK_MIDDLEWARES}"
+      # HTTP
+      - "traefik.http.routers.${TRAEFIK_ROUTER_HTTP}.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_HTTP}.entrypoints=http"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_HTTP}.service=${TRAEFIK_ROUTER_HTTP}"
+      - "traefik.http.services.${TRAEFIK_ROUTER_HTTP}.loadbalancer.server.port=${TRAEFIK_PORT}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_HTTP}.middlewares=${TRAEFIK_MIDDLEWARES}"
+      # HTTPS
+      - "traefik.http.routers.${TRAEFIK_ROUTER_HTTPS}.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_HTTPS}.entrypoints=https"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_HTTPS}.service=${TRAEFIK_ROUTER_HTTPS}"
+      - "traefik.http.services.${TRAEFIK_ROUTER_HTTPS}.loadbalancer.server.port=${TRAEFIK_PORT}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_HTTPS}.tls=${TRAEFIK_TLS_ENABLE}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_HTTPS}.tls.certresolver=${TRAEFIK_CERTRESOLVER}"
 
     networks:
       - traefik-proxy-network
